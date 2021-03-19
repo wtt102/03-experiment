@@ -10,7 +10,7 @@
 
 //globals
 var i_trials = 0;
-const MAX_TRIALS = 5;
+const MAX_TRIALS = 60;
 
 //store participant responses
 var participant = []
