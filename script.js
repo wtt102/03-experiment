@@ -10,7 +10,7 @@
 
 //globals
 var i_trials = 0;
-const MAX_TRIALS = 59;
+const MAX_TRIALS = 60;
 
 //store participant responses
 var participant = []
@@ -29,11 +29,8 @@ btn2.addEventListener('click', (e) => {
 });
 
 
-function shuffleArray(array) {
-    for (let i = array.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [array[i], array[j]] = [array[j], array[i]];
-    }
+function shuffleArray(arr) {
+  arr.sort(() => Math.random() - 0.5);
 }
 
 //identifier of the vizualization
@@ -55,6 +52,7 @@ btn.addEventListener('click', (e) => {
       Number(document.getElementById('response_field').value) >= 0 &&
       Number(document.getElementById('response_field').value) <= 100) {
     participant.push([viz_ids[i_trials].vid + ", " + viz_ids[i_trials].data + ", " + document.getElementById('response_field').value]);
+    i_trials++;
     clear_viz()
     new_viz()
   }
@@ -62,7 +60,6 @@ btn.addEventListener('click', (e) => {
 
 
 function export_participant() {
-  
   csvdata = participant.join('\n')
   var link = window.document.createElement("a");
   link.setAttribute("href", "data:text/csv;charset=utf-8,%EF%BB%BF" + encodeURI(csvdata));
@@ -74,7 +71,6 @@ function export_participant() {
 function new_viz() {
   //if reached max number of trials
   if (i_trials == MAX_TRIALS) {
-  
     export_participant()
     document.getElementById('response_field_div').style="display:none;"
     document.getElementById('viz_div').style="display:none;"
@@ -83,7 +79,6 @@ function new_viz() {
     return 0;
   }
   document.getElementById('counter').textContent =`${i_trials+1}/${MAX_TRIALS}`
-  
   if (viz_ids[i_trials].vid == 0) {
     document.getElementById('circular_caption').style="display:inline;"
     document.getElementById('wordmap_caption').style="display:none;"
@@ -100,7 +95,8 @@ function new_viz() {
     document.getElementById('heatmap_caption').style="display:none;"
     viz_wordcloud(viz_ids[i_trials].data)
   }
-  i_trials++;
+
+
 }
 
 //remove existing experiment
@@ -112,7 +108,7 @@ function clear_viz() {
 
 //experiment 1
 function viz_circular(vid) {
-
+  console.log(viz_ids[i_trials].vid, vid)
   // set the dimensions and margins of the graph
   var margin = {top: 10, right: 10, bottom: 10, left: 10},
       width = 300 - margin.left - margin.right,
@@ -185,6 +181,7 @@ function viz_circular(vid) {
 
 //experiment 2
 function viz_heatmap(vid) {
+  console.log(viz_ids[i_trials].vid, vid)
   var margin = {top: 30, right: 30, bottom: 30, left: 30},
   width = 450 - margin.left - margin.right,
   height = 200 - margin.top - margin.bottom;
@@ -202,7 +199,6 @@ function viz_heatmap(vid) {
     // Labels of row and columns
     
     var ids = []
-    var x = ['x_1']
     function get_ids(d) {
       ids.push(d.data_id)
       //svg.append("rect")
@@ -252,7 +248,7 @@ function viz_heatmap(vid) {
 
 //wordcloud visualization
 function viz_wordcloud(vid) {
-
+  console.log(viz_ids[i_trials].vid, vid)
   // set the dimensions and margins of the graph
   var margin = {top: 10, right: 10, bottom: 10, left: 10},
       width = 450 - margin.left - margin.right,
